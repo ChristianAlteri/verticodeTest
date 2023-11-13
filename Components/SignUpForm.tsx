@@ -1,11 +1,12 @@
 // SignUpForm.tsx
 
 import React, { useState } from "react";
-import Button from "./Button";
 import Dropdown from "./DropDown";
 import Input from "./Input";
 import IPerson from "../models/Person";
 import DateInput from "./DateInput";
+import GeoLocation from "./GeoLocation";
+
 
 interface SignUpFormProps {
   onSubmit: (person: IPerson) => IPerson;
@@ -98,7 +99,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
                 onChange={(value) => handleInputChange("bio", value)}
               />
               <div>
-                <div>IMPLEMENT GeoLocation</div>
+              <GeoLocation
+              
+              />
                 <button
                   type="submit"
                   className="flex justify-center border text-center rounded-md px-3 py-2 text-sm font-semibold w-full hover:bg-emerald-200 hover:cursor-pointer"
@@ -138,7 +141,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
+              <div className="border-gray-300" />
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="bg-white px-2 text-gray-500">
