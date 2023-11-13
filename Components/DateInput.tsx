@@ -7,11 +7,17 @@ interface DateInputProps {
   onChange: (value: string) => void;
 }
 
-const DateInput: React.FC<DateInputProps> = ({ id, label, value, onChange }) => {
+const DateInput: React.FC<DateInputProps> = ({
+  id,
+  label,
+  value,
+  onChange,
+}) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
 
+  // was getting browser error when using Date type so had to convert to string and format
   const formattedDate =
     value instanceof Date
       ? `${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`
@@ -22,6 +28,7 @@ const DateInput: React.FC<DateInputProps> = ({ id, label, value, onChange }) => 
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
+      {/* Used built in calendar */}
       <input
         type="date"
         id={id}

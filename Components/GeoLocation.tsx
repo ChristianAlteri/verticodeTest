@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import Dropdown from './DropDown';
+// I've used the browsers geolocation api to get the users location to avoid API key for google maps
+// In the real world I would use the google maps api to get the users location then backfill the city and country fields using Lat and Long
+
+import React, { useState, useEffect } from "react";
+import Dropdown from "./DropDown";
 
 interface Location {
   latitude: number;
@@ -7,7 +10,11 @@ interface Location {
 }
 
 interface GeoLocationProps {
-  onLocationSelect: (selectedLocation: string, latitude: number, longitude: number) => void;
+  onLocationSelect: (
+    selectedLocation: string,
+    latitude: number,
+    longitude: number
+  ) => void;
 }
 
 const GeoLocation: React.FC<GeoLocationProps> = ({ onLocationSelect }) => {
@@ -15,8 +22,9 @@ const GeoLocation: React.FC<GeoLocationProps> = ({ onLocationSelect }) => {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  //   Safely handling if geolocating is not supported by the browser
   useEffect(() => {
-    if ('geolocation' in navigator) {
+    if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setLocation({
@@ -29,10 +37,11 @@ const GeoLocation: React.FC<GeoLocationProps> = ({ onLocationSelect }) => {
         }
       );
     } else {
-      setError('Geolocation is not supported by your browser');
+      setError("Geolocation is not supported by your browser");
     }
   }, []);
 
+  //   passing data {City, Lat and Long} to SignUpForm.tsx
   const handleDropdownChange = (value: string) => {
     setSelectedLocation(value);
     if (location) {
@@ -47,16 +56,12 @@ const GeoLocation: React.FC<GeoLocationProps> = ({ onLocationSelect }) => {
           <Dropdown
             id="location"
             label="Select location"
-            options={[
-              "London",
-              "Paris",
-              "NewYork",
-              "Sydney",
-            ]}
+            options={["London", "Paris", "NewYork", "Sydney"]}
+            // Send to parent
             onChange={handleDropdownChange}
           />
-          
-          <div 
+
+          <div
             className="
             mt-2
             flex
@@ -76,6 +81,7 @@ const GeoLocation: React.FC<GeoLocationProps> = ({ onLocationSelect }) => {
             mb-6
             "
           >
+            {/* geoloaction browser api */}
             <p>Latitude: {location.latitude}</p>
             <br />
             <p>Longitude: {location.longitude}</p>
@@ -85,7 +91,7 @@ const GeoLocation: React.FC<GeoLocationProps> = ({ onLocationSelect }) => {
         <p>Error: {error}</p>
       ) : (
         <p
-        className="
+          className="
             mt-2
             flex
             justify-center
@@ -103,7 +109,10 @@ const GeoLocation: React.FC<GeoLocationProps> = ({ onLocationSelect }) => {
             sm:text-xs 
             mb-6
             "
-        >Calculating your location...</p>
+        >
+          {/* handle loading state */}
+          Calculating your location...
+        </p>
       )}
     </div>
   );

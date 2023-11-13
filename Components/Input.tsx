@@ -1,11 +1,16 @@
 import React from "react";
 
+// Re use the same Input component
+// Extract the props into an interface
+
 interface InputProps {
   id: string;
   label: string;
   value: string;
   onChange: (value: string) => void;
 }
+
+// Basic styling for the input
 
 const Input: React.FC<InputProps> = ({ id, label, value, onChange }) => {
   return (
@@ -34,8 +39,8 @@ const Input: React.FC<InputProps> = ({ id, label, value, onChange }) => {
         sm:text-sm 
         sm:leading-6"
         value={value}
+        // use the onChange prop to send the value to the parent
         onChange={(e) => onChange(e.target.value)}
-        // tabIndex={0}
       />
     </div>
   );

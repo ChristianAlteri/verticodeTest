@@ -5,12 +5,12 @@ import IPerson from "../models/Person";
 import DateInput from "./DateInput";
 import GeoLocation from "./GeoLocation";
 
-
 interface SignUpFormProps {
   onSubmit: (person: IPerson) => IPerson;
 }
 
 const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
+  // two states, one for form submission (essentially hides the form) and one for form data (right now it collects the data and logs to console, in future it would send a post to a database)
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -28,6 +28,22 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
     },
   });
 
+  // handles form submission
+  const handleSubmit = (event: React.FormEvent) => {
+    // standard prevent default
+    event.preventDefault();
+    // updated person is the data from the form
+    const updatedPerson = onSubmit(formData);
+    // in future we would send this data to a database
+    // setFormSubmitted is switched to true hiding the form. Logic in return statement as ternary operator
+    setFormSubmitted(true);
+    // Logs the function found in app (random num gen (I thought it would be maybe an auth code))
+    console.log("App function", updatedPerson.estimatedScore);
+    // Logs the complete form data eg: bio: "I love in London", dateOfBirth: "1997-05-26", estimatedScore: 6, firstName: "Christian", job: "Firefighter", lastName: "Alteri", location: {city: 'London', country: 'United Kingdom', long: '-0.2472518', lat: '51.5463043', }selectedJobTitle: "Developer"
+    console.log("Form submitted with data:", formData);
+  };
+
+  // handles input change for all input fields
   const handleInputChange = (field: string, value: string) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -35,6 +51,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
     }));
   };
 
+// handles input change for all dropdown fields (jobs)
   const handleDropdownChange = (value: string) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -42,17 +59,13 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    const updatedPerson = onSubmit(formData);
-    setFormSubmitted(true);
-    console.log("App function", updatedPerson.estimatedScore);
-    console.log("Form submitted with data:", formData);
-  };
-
-  const handleLocationSelect = (selectedLocation: string, latitude: number, longitude: number) => {
-    let selectedCountry = ""; 
-  
+  // Hard coded logic and locations
+  const handleLocationSelect = (
+    selectedLocation: string,
+    latitude: number,
+    longitude: number
+  ) => {
+    let selectedCountry = "";
 
     if (selectedLocation === "London") {
       selectedCountry = "United Kingdom";
@@ -66,25 +79,25 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
     if (selectedLocation === "Sydney") {
       selectedCountry = "Australia";
     }
-  
+
     setFormData((prevData) => ({
       ...prevData,
       location: {
         ...prevData.location,
         city: selectedLocation,
-        country: selectedCountry, 
+        country: selectedCountry,
         lat: latitude.toString(),
         long: longitude.toString(),
       },
     }));
   };
 
+  // Takes you 'back' to the form
   const handleReloadClick = () => {
-    window.location.reload(); 
+    window.location.reload();
   };
 
-
-
+  // The return statement is the form, if formSubmitted is true then it shows the auth code using ternary operator
   return (
     <div>
       {!formSubmitted && (
@@ -128,9 +141,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
                 onChange={(value) => handleInputChange("bio", value)}
               />
               <div>
-              <GeoLocation
-              onLocationSelect={handleLocationSelect}
-              />
+                <GeoLocation onLocationSelect={handleLocationSelect} />
                 <button
                   type="submit"
                   className="flex justify-center border text-center rounded-md px-3 py-2 text-sm font-semibold w-full hover:bg-emerald-200 hover:cursor-pointer"
@@ -161,7 +172,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
           hover:bg-red-200
           hover:cursor-pointer
         "
-        onClick={handleReloadClick}
+            onClick={handleReloadClick}
           >
             Your Auth Code
           </div>
@@ -183,9 +194,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
 
       {formSubmitted && (
         <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
-           {formData.estimatedScore}
+          {formData.estimatedScore}
         </div>
-        
       )}
     </div>
   );

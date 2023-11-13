@@ -8,7 +8,13 @@ interface DropdownProps {
   onChange?: (value: string) => void;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, id, options, value, onChange }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  label,
+  id,
+  options,
+  value,
+  onChange,
+}) => {
   return (
     <div>
       <label
@@ -28,7 +34,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, id, options, value, onChange
         <select
           id={id}
           autoComplete={id}
-          className='
+          className="
                 form-select
                 block 
                 w-full 
@@ -47,10 +53,11 @@ const Dropdown: React.FC<DropdownProps> = ({ label, id, options, value, onChange
                 focus:ring-emerald-500 
                 sm:text-sm 
                 sm:leading-6
-                '
+                "
           value={value}
           onChange={(e) => onChange && onChange(e.target.value)}
         >
+          {/* Hard coding options from parent */}
           {options &&
             options.map((option, index) => (
               <option key={index} value={option}>
