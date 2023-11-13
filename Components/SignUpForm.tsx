@@ -1,5 +1,3 @@
-// SignUpForm.tsx
-
 import React, { useState } from "react";
 import Dropdown from "./DropDown";
 import Input from "./Input";
@@ -52,9 +50,40 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
     console.log("Form submitted with data:", formData);
   };
 
+  const handleLocationSelect = (selectedLocation: string, latitude: number, longitude: number) => {
+    let selectedCountry = ""; 
+  
+
+    if (selectedLocation === "London") {
+      selectedCountry = "United Kingdom";
+    }
+    if (selectedLocation === "Paris") {
+      selectedCountry = "France";
+    }
+    if (selectedLocation === "NewYork") {
+      selectedCountry = "United States";
+    }
+    if (selectedLocation === "Sydney") {
+      selectedCountry = "Australia";
+    }
+  
+    setFormData((prevData) => ({
+      ...prevData,
+      location: {
+        ...prevData.location,
+        city: selectedLocation,
+        country: selectedCountry, 
+        lat: latitude.toString(),
+        long: longitude.toString(),
+      },
+    }));
+  };
+
   const handleReloadClick = () => {
     window.location.reload(); 
   };
+
+
 
   return (
     <div>
@@ -100,7 +129,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
               />
               <div>
               <GeoLocation
-              
+              onLocationSelect={handleLocationSelect}
               />
                 <button
                   type="submit"
